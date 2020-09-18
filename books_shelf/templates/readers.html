@@ -35,7 +35,7 @@
               <td class="text-right">
                 <form action='' method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {% if reader.can_manage_library %}
+                    {% if reader.profile.can_manage_library %}
                         <input type="hidden" name="reader_id" value="{{ reader.profile.id }}"/>
                         <input type="hidden" name="action" value="unset_librarian"/>
                         <input class="btn btn-outline-info active" type="submit" value="Библиотекарь"/>
