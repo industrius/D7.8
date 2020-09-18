@@ -70,6 +70,7 @@ WSGI_APPLICATION = 'library_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# # БД sqlite3
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -77,17 +78,20 @@ WSGI_APPLICATION = 'library_project.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': 'bookshelf',
-        'USER': 'app',
-        'PASSWORD': 'P@ssw0rd',
-        'HOST': 'localhost',   
-        'PORT': '5432',
-    }    
-}
+# # БД Postgres
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql', 
+#         'NAME': 'bookshelf',
+#         'USER': 'app',
+#         'PASSWORD': 'P@ssw0rd',
+#         'HOST': 'localhost',   
+#         'PORT': '5432',
+#     }    
+# }
 
+# БД Heroku
+DATABASES = {'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
