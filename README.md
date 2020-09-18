@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 6. Создать в БД Postgres базу с именем "bookshelf", пользователя с именем "app" и паролем "P@ssw0rd".
 
-7. Выполнить миграции для создания БД:
+7. Выполнить миграции БД:
 
 python manage.py migrate
 
