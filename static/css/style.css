@@ -1,0 +1,13 @@
+@font-face{
+	src: url('../fonts/Gabriela-Regular.ttf');
+	font-family: 'Gabriela';
+	font-weight: normal;
+}
+
+.table_cell{
+    vertical-align: middle !important
+}
+
+body{
+    font-family: Gabriela;
+}

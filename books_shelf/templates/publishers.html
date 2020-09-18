@@ -1,0 +1,46 @@
+{% extends "wrapper.html" %}
+{% block content %}
+  <div class="d-flex flex-wrap flex-sm-nowrap">
+    <h1 class="w-100 display-4">Перечень издательств</h1>
+    {% if user.profile.can_manage_library or user.is_superuser %}
+    <div class="d-flex align-items-center flex-sm-shrink-0 flex-grow-1 mt-sm-0 mt-2 pt-2">
+      <a class="btn btn-outline-info w-100" href='{% url "create_publisher" %}'>Добавить издателя</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="table-responsive mt-3">
+    <table class="table table-borderless text-secondary table-hover m-0">
+      <thead class="bg-info text-light">
+        <tr>
+          <th scope="col">Наименование издательства</th>
+          <th scope="col" class="text-center">Книги в библиотеке</th>
+          {% if user.profile.can_manage_library or user.is_superuser %}
+          <th scope="col"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for publisher in publishers_list %}
+          <tr style="cursor: pointer; cursor: hand;" onclick="window.location='/publisher/{{ publisher.id }}'">
+              <th scope="row" class="table_cell">{{ publisher.title }}</th>
+              <td class="text-center table_cell">{{ publisher.books_count }}</td>
+              {% if user.profile.can_manage_library or user.is_superuser %}
+              <td class="text-right">
+                <form action='{% url "delete_publisher" %}' method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <input type="hidden" name="publisher_id" value="{{publisher.id}}"/>
+                  <input class="btn btn-outline-danger" type="submit" value="Удалить"/>
+                </form>
+              </td>
+              {% endif %}
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+  <span class="badge rounded-0 badge-info pb-1 col-12 my-3">Общее количество издательств {{ publishers_list|length }}</span>
+{% endblock %}

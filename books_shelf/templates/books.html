@@ -1,0 +1,48 @@
+{% extends "wrapper.html" %}
+{% block content %}
+  <h1 class="display-4">Добро пожаловать в мою библиотеку</h1>
+  <div class="d-flex flex-wrap flex-sm-nowrap">
+    <div class="w-100">
+      <p class="lead text-info">SkillFactory <span class="text-danger">:</span> D7.8 Домашнее задание</p>
+      <p class="text-justify">Нужно добавить создание пользователей в качестве моделей, для которых нужно использовать встроенные модели Django (django.contrib.auth.models.User), а их профили должны либо создаваться отдельной (самодельной) формой, либо при помощи allauth с авторизацией через github.</p>
+    </div>
+    {% if user.profile.can_manage_library or user.is_superuser %}
+      <div class="d-flex align-items-end flex-sm-shrink-0 flex-grow-1 mt-sm-0 mt-3 ml-sm-3">
+        <a class="btn btn-outline-info w-100" href='{% url "create_book" %}'>Добавить книгу</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="table-responsive mt-3">
+    <table class="table table-borderless text-secondary table-hover m-0">
+      <thead class="bg-info text-light">
+        <tr>
+          <th scope="col" class="table_cell">Книга</th>
+          <th scope="col" class="table_cell"></th>
+          <th scope="col" class="text-center table_cell">Автор</th>
+          <th scope="col" class="text-center table_cell">Страна</th>
+          <th scope="col" class="text-center table_cell">Год издания</th>
+          <th scope="col" class="text-center table_cell">Остаток</th>
+          <th scope="col" class="text-center table_cell">Читают</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for book in books_list %}
+          <tr style="cursor: pointer; cursor: hand;" onclick="window.location='/book/{{ book.id }}'">
+              <th scope="row"><img class="border border-info" src="{{ book.image.url }}" width="60"/></th>
+              <td class="lead table_cell"><strong>{{ book.title }}</strong></td>
+              <td class="text-center table_cell">{{ book.author.full_name }}</td>
+              <td class="text-center table_cell">{{ book.author.country }}</td>
+              <td class="text-center table_cell">{{ book.year_release }}</td>
+              <td class="text-center table_cell">{{ book.copy_count }}</td>
+              <td class="text-center table_cell">{{ book.readers.all|length }}</td>
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+  <span class="badge rounded-0 badge-info pb-1 col-12 my-3">Общее количество наименований в библиотеке {{ books_list|length }}</span>
+{% endblock %}

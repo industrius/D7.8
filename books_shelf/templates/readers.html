@@ -1,0 +1,67 @@
+{% extends "wrapper.html" %}
+{% block content %}
+  <div class="d-flex flex-wrap flex-sm-nowrap">
+    <h1 class="w-100 display-4">Читатели</h1>
+    {% if user.profile.can_manage_library or user.is_superuser %}
+      <div class="d-flex align-items-center flex-sm-shrink-0 flex-grow-1 mt-sm-0 mt-2 pt-2">
+        <a class="btn btn-outline-info w-100" href='{% url "register" %}'>Добавить читателя</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="table-responsive my-3">
+    <table class="table table-borderless text-secondary table-hover m-0">
+      <thead class="bg-info text-light">
+        <tr>
+          <th scope="col">Имя</th>
+          <th scope="col" class="text-center">Читают книги</th>
+          {% if user.profile.can_manage_library or user.is_superuser %}
+            <th scope="col"></th>
+            <th scope="col"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for reader in profiles %}
+          <tr 
+          {% if user.profile.can_manage_library or user.is_superuser %}
+          style="cursor: pointer; cursor: hand;" onclick="window.location='/reader/{{ reader.profile.id }}'"
+          {% endif %}
+          >
+            <th scope="row" class="table_cell">{% if reader.first_name %} {{ reader.first_name }} {{ reader.last_name }} {% else %} {{ reader.user }} {% endif %}</th>
+            <td class="text-center table_cell">{{ reader.profile.rented_books.all|length }}</td>
+            {% if user.profile.can_manage_library or user.is_superuser %}
+              <td class="text-right">
+                <form action='' method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if reader.can_manage_library %}
+                        <input type="hidden" name="reader_id" value="{{ reader.profile.id }}"/>
+                        <input type="hidden" name="action" value="unset_librarian"/>
+                        <input class="btn btn-outline-info active" type="submit" value="Библиотекарь"/>
+                    {% else %}
+                        <input type="hidden" name="reader_id" value="{{ reader.profile.id }}"/>
+                        <input type="hidden" name="action" value="set_librarian"/>
+                        <input class="btn btn-outline-info" type="submit" value="Библиотекарь"/>
+                    {% endif %}
+                </form>
+              </td>
+              <td class="text-right">
+                <form action='' method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <input type="hidden" name="reader_id" value="{{ reader.profile.id }}"/>
+                  <input type="hidden" name="action" value="delete_reader"/>
+                  <input class="btn btn-outline-danger" type="submit" value="Удалить"/>
+                </form>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+
+  <span class="badge rounded-0 badge-info pb-1 col-12 mb-3">Общее количество читателей {{ friends_list|length }}</span>
+{% endblock %}

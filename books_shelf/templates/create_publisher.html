@@ -1,0 +1,14 @@
+{% extends "wrapper.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1 class="display-4">Добавить издателя</h1>
+<form action='{% url "create_publisher" %}' method="post">
+    {% csrf_token %}
+    <div class="form-row mt-3">
+        <div class="form-group col-12 text-info">
+            {{ publisher_form.title|as_crispy_field }}
+        </div>
+    </div>
+    <input class="btn btn-outline-info active w-100 mb-3" type="submit" value="Сохранить">  
+</form>
+{% endblock %}
